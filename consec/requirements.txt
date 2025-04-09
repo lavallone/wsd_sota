@@ -1,0 +1,8 @@
+pytorch-lightning==1.1.7
+hydra-core==1.1.0.dev5
+transformers==4.30.2
+protobuf==3.20.3
+comet-ml==3.10.0
+networkx==2.5
+black==20.8b1
+nltk==3.4.5
