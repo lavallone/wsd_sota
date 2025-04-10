@@ -1,0 +1,29 @@
+FROM nvidia/cuda:11.0.3-base-ubuntu20.04
+
+
+RUN apt-get update && apt install --no-install-recommends -y build-essential \
+    python3-pip \
+    git \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/* \
+    && git clone https://github.com/lavallone/wsd_sota.git && cd wsd_sota \
+    && chmod +x setup.sh && ./setup.sh \
+    && wget https://huggingface.co/lavallone/consec/resolve/main/consec_semcor_normal_best.ckpt?download=true -O consec/experiments/released-ckpts/consec_semcor_normal_best.ckpt
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O Miniconda3.sh \
+    && chmod +x Miniconda3.sh \
+    && ./Miniconda3.sh -b -p /opt/conda \
+    && rm Miniconda3.sh
+
+ENV PATH="/opt/conda/bin:$PATH"
+RUN conda init bash && echo "conda activate consec" >> ~/.bashrc
+
+RUN conda create -n consec python=3.7 -y \
+    && source activate consec \
+    && cd /wsd_sota/consec \
+    && pip install --no-cache-dir -r requirements.txt
+
+
+WORKDIR /wsd_sota/consec
+
