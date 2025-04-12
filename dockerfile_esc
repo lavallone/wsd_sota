@@ -20,9 +20,11 @@ ENV PATH="/opt/conda/bin:$PATH"
 RUN conda init bash && echo "conda activate esc" >> ~/.bashrc
 
 RUN conda create -n esc python=3.7 -y \
-    && source activate esc \
+    && /bin/bash -c "source activate esc \
     && cd /wsd_sota/esc \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt"
 
+RUN pip install nltk && \
+    python -c "import nltk; nltk.download('wordnet', quiet=True)"
 
 WORKDIR /wsd_sota/esc
